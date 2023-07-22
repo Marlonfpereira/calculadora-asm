@@ -1,3 +1,9 @@
+;Calculadora simples em assembly de x86_64 sintax Intel
+;recebe a entrada float op float
+;calcula e imprime o resultado no arquivo "out.txt"
+;linha de montagem e linker: nasm -f elf64 calculadora.asm; gcc -m64 -no-pie calculadora.o -o calculadora.x
+;linha de execução: ./calculadora.x
+
 section .data
     align 16, db 0
     strCtrlScan: db "%f %c %f", 0
@@ -8,6 +14,7 @@ section .data
     strFileName: db "out.txt", 0
     strFileMode: db "a+", 0
     zero: dd 0
+
 section .bss
     alignb 16
     op_a      : resd 1
@@ -17,6 +24,7 @@ section .bss
     alignb 16
     resultado : resd 1
     file : resd 1
+
 extern scanf
 extern fprintf
 extern printf
@@ -29,6 +37,7 @@ section .text
 main: 
     push rbp
     mov rbp, rsp
+
 abreFile:
     lea rdi, [strFileName]
     lea rsi, [strFileMode]
@@ -107,7 +116,12 @@ fechaFile:
 
 mov rsp, rbp
 pop rbp
-ret
+
+fim:
+    mov rax, 60
+    mov rdi, 0
+    syscall
+
 
 adicao:
     push rbp
@@ -156,12 +170,13 @@ divisao:
 exponenciacao:
     push rbp
     mov rbp, rsp
-    
-    cvttss2si r8, xmm1
+
+
+    cvttss2si r8, xmm1; conversao do op2 para inteiro, por truncamento
     movss xmm2, xmm0
     cmp r8, 0
     jg laco
-    mov r9, 1
+    mov r9, 1;caso se zero retorna 1 independe do valor do op 1
     cvtsi2ss xmm0, r9
     jmp fimExp
     laco:
@@ -206,6 +221,6 @@ escrevesolucaoNOTOK:
     call fprintf
 
     mov rsp, rbp
-    pop rbp
     
+    pop rbp
     ret
