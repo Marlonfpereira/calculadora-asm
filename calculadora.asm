@@ -6,6 +6,8 @@
 
 section .data
     align 16, db 0
+    strPrint: db "equação: ", 0
+    align 16, db 0
     strCtrlScan: db "%f %c %f", 0
     align 16, db 0
     strPrintNotOk : db "%lf %c %lf = funcionalidade não disponível", 10, 0
@@ -44,6 +46,11 @@ abreFile:
     call fopen
 
     mov [file], eax
+
+print:
+    xor rax, rax
+    mov rdi, strPrint
+    call printf
 
 scan:
     xor rax,rax    
