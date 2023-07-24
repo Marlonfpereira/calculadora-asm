@@ -181,6 +181,8 @@ exponenciacao:
 
     cvttss2si r8, xmm1; conversao do op2 para inteiro, por truncamento
     movss xmm2, xmm0
+    cmp r8, 1
+    je fimExp
     cmp r8, 0
     jg laco
     mov r9, 1;caso se zero retorna 1 independe do valor do op 1
